@@ -8,6 +8,9 @@ class Note(db.Model):
     date = db.Column(db.DateTime(timezone=True), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    def formatted_date(self):
+        return self.date.strftime('%m/%d/%y')
+
 
 
 class User(db.Model, UserMixin):
@@ -16,3 +19,17 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     notes = db.relationship('Note')
+
+
+class WorkOrder(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    work_order_number = db.Column(db.Integer, default = 1, nullable=False)
+    client_name = db.Column(db.String(150))
+    job_address = db.Column(db.String(150))
+    start_date = db.Column(db.DateTime(timezone=True), default=func.now())
+    floor_prep = db.Column(db.String(200))
+    floor_type = db.Column(db.String(200))
+    baseboards = db.Column(db.String(200))
+    materials = db.Column(db.String(200))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+

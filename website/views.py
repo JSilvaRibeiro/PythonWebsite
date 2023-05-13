@@ -1,7 +1,9 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
+from sqlalchemy import func
 from flask_login import login_required, current_user
-from .models import Note
+from .models import Note, WorkOrder
 from . import db
+from .forms import CreateWorkOrderForm
 import json
 
 views = Blueprint('views', __name__)
@@ -35,4 +37,33 @@ def delete_note():
             db.session.commit()
     return jsonify({})
 
-    
+@views.route('/create_work_order', methods=['GET', 'POST'])
+@login_required
+def create_work_order():
+    form = CreateWorkOrderForm()
+    if form.validate_on_submit():
+        work_order_number = WorkOrder.query.with_entities(func.max(WorkOrder.work_order_number)).scalar() or 0
+        new_work_order = WorkOrder(
+            work_order_number=work_order_number + 1,
+            client_name=form.client_name.data,
+            job_address=form.job_address.data,
+            start_date=form.start_date.data,
+            floor_prep=form.floor_prep.data,
+            floor_type=form.floor_type.data,
+            baseboards=form.baseboards.data,
+            materials=form.materials.data,
+            user_id=current_user.id
+        )
+        db.session.add(new_work_order)
+        db.session.commit()
+        flash('Work order created successfully!', category='success')
+        return redirect(url_for('views.home'))
+    return render_template('create_work_order.html', user=current_user, form=form)
+
+
+@views.route('/orders')
+@login_required
+def orders():
+    user = current_user
+    orders = WorkOrder.query.filter_by(user_id=user.id).all()
+    return render_template('orders.html', orders=orders, user=user)

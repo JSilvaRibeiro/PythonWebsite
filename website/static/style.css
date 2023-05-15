@@ -1,0 +1,101 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+table,
+th,
+td {
+  border: 1px solid black;
+  padding: 5px;
+  text-align: left;
+}
+
+th {
+  background-color: #ddd;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.invoice-header div {
+  flex: 1;
+}
+
+.invoice-header h1 {
+  font-size: 32px;
+  margin: 0;
+}
+
+.invoice-header p {
+  margin: 0;
+}
+
+.invoice-header .logo {
+  text-align: right;
+}
+
+.invoice-header img {
+  max-height: 100px;
+}
+
+.invoice-info {
+  margin-bottom: 20px;
+}
+
+.invoice-info table {
+  margin-bottom: 0;
+}
+
+.invoice-info table td {
+  padding: 0;
+  font-weight: bold;
+}
+
+.invoice-items {
+  margin-bottom: 20px;
+}
+
+.invoice-items table {
+  margin-bottom: 0;
+}
+
+.invoice-items th {
+  background-color: #ddd;
+  text-align: center;
+}
+
+.invoice-items td {
+  padding: 10px;
+  text-align: center;
+}
+
+.invoice-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invoice-footer p {
+  margin: 0;
+}
+
+.invoice-footer .signature {
+  text-align: right;
+}
+
+.invoice-footer img {
+  max-height: 50px;
+}
+.logo {
+  margin-top: 10px;
+}

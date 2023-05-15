@@ -1,31 +1,60 @@
-{% extends 'base.html' %} {% block content %}
-<h1>Work Orders</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Order Number</th>
-      <th>Client Name</th>
-      <th>Job Address</th>
-      <th>Floor Prep</th>
-      <th>Floor Type</th>
-      <th>Baseboard</th>
-      <th>Start Date</th>
-      <th>Materials</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for order in orders %}
-    <tr>
-      <td>{{ order.order_number }}</td>
-      <td>{{ order.client_name }}</td>
-      <td>{{ order.job_address }}</td>
-      <td>{{ order.floor_prep }}</td>
-      <td>{{ order.floor_type }}</td>
-      <td>{{ order.baseboards }}</td>
-      <td>{{ order.start_date.strftime('%m/%d/%Y') }}</td>
-      <td>{{ order.materials }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+{% extends "base.html" %} {% block title %}Work Orders{% endblock %} {% block
+content%}
+<head>
+  <title>Work Orders</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  {% for order in orders %}
+  <div class="invoice-header">
+    <div>
+      <h1>Work Order #{{ order.work_order_number }}</h1>
+    </div>
+    <div class="logo">
+      <img src="{{ url_for('static', filename='logo.jpg') }}" />
+    </div>
+  </div>
+  <div class="invoice-info">
+    <table>
+      <tr>
+        <td>Start Date:</td>
+        <td>{{ order.start_date.strftime('%B %d, %Y') }}</td>
+      </tr>
+      <tr>
+        <td>Client Name:</td>
+        <td>{{ order.client_name }}</td>
+      </tr>
+      <tr>
+        <td>Job Address:</td>
+        <td>{{ order.job_address }}</td>
+      </tr>
+      <tr>
+        <td>Floor Type:</td>
+        <td>{{ order.floor_type }}</td>
+      </tr>
+      <tr>
+        <td>Materials:</td>
+        <td>{{ order.materials }}</td>
+      </tr>
+      <tr>
+        <td>Floor Prep:</td>
+        <td>{{ order.floor_prep }}</td>
+      </tr>
+      <tr>
+        <td>Baseboards:</td>
+        <td>{{ order.baseboards }}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="invoice-actions">
+    <a href="{{ url_for('views.edit_order', order_id=order.id) }}">Edit</a>
+    <form
+      action="{{ url_for('views.delete_order', order_id=order.id) }}"
+      method="POST"
+    >
+      <button type="submit">Delete</button>
+    </form>
+  </div>
+  {% endfor %}
+</body>
 {% endblock %}

@@ -57,7 +57,7 @@ def create_work_order():
         db.session.add(new_work_order)
         db.session.commit()
         flash('Work order created successfully!', category='success')
-        return redirect(url_for('views.home'))
+        return redirect(url_for('views.orders'))
     return render_template('create_work_order.html', user=current_user, form=form)
 
 
@@ -67,3 +67,27 @@ def orders():
     user = current_user
     orders = WorkOrder.query.filter_by(user_id=user.id).all()
     return render_template('orders.html', orders=orders, user=user)
+
+
+@views.route('/orders/edit/<int:order_id>', methods=['GET', 'POST'])
+@login_required
+def edit_order(order_id):
+    user = current_user
+    order = WorkOrder.query.get_or_404(order_id)
+    form = CreateWorkOrderForm(obj=order)
+    if form.validate_on_submit():
+        form.populate_obj(order)
+        db.session.commit()
+        flash('Order updated successfully.', 'success')
+        return redirect(url_for('views.orders'))
+    return render_template('edit_order.html', form=form, user=user)
+
+
+@views.route('/orders/delete/<int:order_id>', methods=['POST'])
+@login_required
+def delete_order(order_id):
+    order = WorkOrder.query.get_or_404(order_id)
+    db.session.delete(order)
+    db.session.commit()
+    flash('Order deleted successfully.', 'success')
+    return redirect(url_for('views.orders'))
